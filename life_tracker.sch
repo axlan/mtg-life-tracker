@@ -1,0 +1,39 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L SparkFun-LED:7-SEGMENT-4DIGIT-10MM-KGREEN LED1
+U 1 1 6167400B
+P 5650 3800
+F 0 "LED1" H 7178 4103 45  0000 L CNN
+F 1 "7-SEGMENT-4DIGIT-GREEN-CC" H 7178 4019 45  0000 L CNN
+F 2 "7-SEGMENT-4DIGIT-YOUNGSUN" H 5650 2850 20  0001 C CNN
+F 3 "https://www.vishay.com/docs/83180/tdcx10x0m.pdf" H 5650 3800 50  0001 C CNN
+F 4 "TDCG1060M" H 7178 3924 60  0000 L CNN "Field4"
+	1    5650 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L MySymbols:TACTILE-NAV-SWITCH J1
+U 1 1 6167DB3B
+P 7350 1750
+F 0 "J1" H 7350 2215 50  0000 C CNN
+F 1 "TACTILE-NAV-SWITCH" H 7350 2124 50  0000 C CNN
+F 2 "MyFootprints:JS1300AQ" H 7700 2150 50  0001 C CNN
+F 3 "" H 7700 2150 50  0001 C CNN
+	1    7350 1750
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
