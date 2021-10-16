@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name MySymbols)(type Legacy)(uri ${KIPRJMOD}/MySymbols.lib)(options "")(descr ""))
+  (lib (name MySymbols)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/MySymbols.lib)(options "")(descr ""))
+  (lib (name SparkFun-LED)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/SparkFun-LED.lib)(options "")(descr ""))
 )
