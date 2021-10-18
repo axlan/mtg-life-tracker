@@ -1,4 +1,7 @@
 (sym_lib_table
   (lib (name MySymbols)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/MySymbols.lib)(options "")(descr ""))
   (lib (name SparkFun-LED)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/SparkFun-LED.lib)(options "")(descr ""))
+  (lib (name 2021-10-17_23-58-43)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/2021-10-17_23-58-43.lib)(options "")(descr ""))
+  (lib (name BAW56)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/BAW56.lib)(options "")(descr ""))
+  (lib (name 2021-10-18_05-36-44)(type Legacy)(uri ${KIPRJMOD}/MyLibraries/2021-10-18_05-36-44.lib)(options "")(descr ""))
 )
