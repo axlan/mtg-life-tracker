@@ -1,0 +1,3 @@
+[submodule "firmware/lib/arduino-as1115"]
+	path = firmware/lib/arduino-as1115
+	url = git@github.com:blemasle/arduino-as1115.git
