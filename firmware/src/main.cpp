@@ -2,14 +2,14 @@
  * Any press on one of the 16 keys will increase the displayed counter.
  */
 
-// Directional Pad 
+// Directional Pad
 // 1 left: SegC 2
 // 2 up: SegD 3
 // 3 middle: SegE 4
 // 4 down: SegF 5
 // 5 right: SegG 6
 
-// Buttons 
+// Buttons
 // top: SegB 1
 // bottom: SegA 0
 
@@ -18,32 +18,34 @@
 // Add Reset
 // Be able to display two totals < 100
 
+#include <math.h>
 
 #include <Wire.h>
 #include <AS1115.h>
 
-#define AS1115_ISR_PIN  2 ///< Interrupt pin connected to AS1115
+#define AS1115_ISR_PIN 2 ///< Interrupt pin connected to AS1115
 
 constexpr size_t NUM_TOTALS = 10;
 uint16_t totals[NUM_TOTALS] = {0};
-uint8_t selected_total = 0;
-uint8_t selected_digit = 0;
+int selected_total = 0;
+int selected_digit = 0;
 
 AS1115 as = AS1115(0x00);
 volatile bool interrupted = false;
 
-void interrupt() {
+void interrupt()
+{
     interrupted = true;
 }
 
 void setup()
 {
     pinMode(AS1115_ISR_PIN, INPUT);
-	attachInterrupt(digitalPinToInterrupt(AS1115_ISR_PIN), interrupt, FALLING);
+    attachInterrupt(digitalPinToInterrupt(AS1115_ISR_PIN), interrupt, FALLING);
 
-	Wire.begin();
-	as.init(4, 6);
-	as.clear();
+    Wire.begin();
+    as.init(4, 6);
+    as.clear();
     as.read(); // reset any pending interrupt on the chip side
 
     as.display(0, 0);
@@ -51,31 +53,64 @@ void setup()
 
 void loop()
 {
-    if(!interrupted) {
+    if (!interrupted)
+    {
         delay(100);
         return;
     }
 
     interrupted = false;
-    
+
     // active input are LOW, it's easier to invert the result
     uint16_t current = ~as.read();
-    if(current == 0) return;
+    if (current == 0)
+        return;
 
-
-    if (bitRead(current, 0)) {
-
-    } else if(bitRead(current, 0)) {
-
+    // (In/De)crement
+    if (current & 0b11)
+    {
+        int total;
+        int change = pow(10, selected_digit);
+        if (current & 0b1)
+        {
+            change *= -1;
+        }
+        total = totals[selected_total] + change;
+        total = min(total, 9999);
+        total = max(total, 0);
+        totals[selected_total] = total;
+    }
+    // Left
+    else if (bitRead(current, 2))
+    {
+        selected_digit = min(selected_digit + 1, 3);
+    }
+    // Right
+    else if (bitRead(current, 6))
+    {
+        selected_digit = max(selected_digit - 1, 0);
+    }
+    // Up
+    else if (bitRead(current, 3))
+    {
+        selected_total++;
+        selected_total %= NUM_TOTALS;
+    }
+    // Down
+    else if (bitRead(current, 5))
+    {
+        if (selected_total == 0)
+        {
+            selected_total = NUM_TOTALS - 1;
+        }
+        else
+        {
+            selected_total--;
+        }
     }
 
-
-
-
-    as.display(totals[selected_total], 0);
+    as.display(totals[selected_total], selected_digit);
 }
-
-
 
 // /**************************************************************************
 //  This is an example for our Monochrome OLEDs based on SSD1306 drivers
@@ -99,7 +134,7 @@ void loop()
 // #define SCREEN_WIDTH 128 // OLED display width, in pixels
 // #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 // // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-// // The pins for I2C are defined by the Wire-library. 
+// // The pins for I2C are defined by the Wire-library.
 // // On an arduino UNO:       A4(SDA), A5(SCL)
 // // On an arduino MEGA 2560: 20(SDA), 21(SCL)
 // // On an arduino LEONARDO:   2(SDA),  3(SCL), ...
@@ -407,4 +442,3 @@ void loop()
 // }
 // void loop() {
 // }
-
