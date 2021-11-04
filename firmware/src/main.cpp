@@ -3,15 +3,15 @@
  */
 
 // Directional Pad
-// 1 left: SegC 2
+// 1 left: SegC 4
 // 2 up: SegD 3
-// 3 middle: SegE 4
-// 4 down: SegF 5
-// 5 right: SegG 6
+// 3 middle: SegE 2
+// 4 down: SegF 1
+// 5 right: SegG 0
 
 // Buttons
-// top: SegB 1
-// bottom: SegA 0
+// top: SegB 5
+// bottom: SegA 6
 
 //Todo:
 // Add OLED
@@ -33,7 +33,7 @@ int selected_digit = 0;
 AS1115 as = AS1115(0x00);
 volatile bool interrupted = false;
 
-void interrupt()
+void IRAM_ATTR interrupt()
 {
     interrupted = true;
 }
@@ -49,6 +49,8 @@ void setup()
     as.read(); // reset any pending interrupt on the chip side
 
     as.display(0, 0);
+    
+    Serial.begin(9600);
 }
 
 void loop()
@@ -65,13 +67,15 @@ void loop()
     uint16_t current = ~as.read();
     if (current == 0)
         return;
+    
+    Serial.println(String("Got press: ") + current);
 
     // (In/De)crement
-    if (current & 0b11)
+    if (current & 0b1100000)
     {
         int total;
         int change = pow(10, selected_digit);
-        if (current & 0b1)
+        if (bitRead(current, 6))
         {
             change *= -1;
         }
@@ -81,12 +85,12 @@ void loop()
         totals[selected_total] = total;
     }
     // Left
-    else if (bitRead(current, 2))
+    else if (bitRead(current, 4))
     {
         selected_digit = min(selected_digit + 1, 3);
     }
     // Right
-    else if (bitRead(current, 6))
+    else if (bitRead(current, 0))
     {
         selected_digit = max(selected_digit - 1, 0);
     }
@@ -97,7 +101,7 @@ void loop()
         selected_total %= NUM_TOTALS;
     }
     // Down
-    else if (bitRead(current, 5))
+    else if (bitRead(current, 1))
     {
         if (selected_total == 0)
         {
