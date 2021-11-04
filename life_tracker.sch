@@ -27,23 +27,23 @@ $EndComp
 $Comp
 L MCU_Module:WeMos_D1_mini U1
 U 1 1 616A6F86
-P 1100 3050
-F 0 "U1" H 1500 2350 50  0000 C CNN
-F 1 "WeMos_D1_mini" H 1500 2250 50  0000 C CNN
-F 2 "Module:WEMOS_D1_mini_light" H 1100 1900 50  0001 C CNN
-F 3 "https://wiki.wemos.cc/products:d1:d1_mini#documentation" H -750 1900 50  0001 C CNN
-	1    1100 3050
+P 1100 2950
+F 0 "U1" H 1500 2250 50  0000 C CNN
+F 1 "WeMos_D1_mini" H 1500 2150 50  0000 C CNN
+F 2 "Module:WEMOS_D1_mini_light" H 1100 1800 50  0001 C CNN
+F 3 "https://wiki.wemos.cc/products:d1:d1_mini#documentation" H -750 1800 50  0001 C CNN
+	1    1100 2950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R1
 U 1 1 616AB4D4
-P 1800 2600
-F 0 "R1" H 1870 2646 50  0000 L CNN
-F 1 "4.7k" H 1870 2555 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 1730 2600 50  0001 C CNN
-F 3 "~" H 1800 2600 50  0001 C CNN
-	1    1800 2600
+P 1800 2500
+F 0 "R1" H 1870 2546 50  0000 L CNN
+F 1 "4.7k" H 1870 2455 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 1730 2500 50  0001 C CNN
+F 3 "~" H 1800 2500 50  0001 C CNN
+	1    1800 2500
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -58,16 +58,16 @@ F 3 "~" H 4150 1450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1000 2250 1000 2100
+	1000 2150 1000 2000
 $Comp
 L power:+5V #PWR01
 U 1 1 616E34AC
-P 1000 2100
-F 0 "#PWR01" H 1000 1950 50  0001 C CNN
-F 1 "+5V" H 1015 2273 50  0000 C CNN
-F 2 "" H 1000 2100 50  0001 C CNN
-F 3 "" H 1000 2100 50  0001 C CNN
-	1    1000 2100
+P 1000 2000
+F 0 "#PWR01" H 1000 1850 50  0001 C CNN
+F 1 "+5V" H 1015 2173 50  0000 C CNN
+F 2 "" H 1000 2000 50  0001 C CNN
+F 3 "" H 1000 2000 50  0001 C CNN
+	1    1000 2000
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -82,37 +82,27 @@ F 3 "" H 1100 4000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1100 4000 1100 3850
+	1100 3900 1100 3750
 $Comp
 L Device:R R2
 U 1 1 616E5F64
-P 2000 2700
-F 0 "R2" H 2070 2746 50  0000 L CNN
-F 1 "4.7k" H 2070 2655 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 1930 2700 50  0001 C CNN
-F 3 "~" H 2000 2700 50  0001 C CNN
-	1    2000 2700
+P 2000 2600
+F 0 "R2" H 2070 2646 50  0000 L CNN
+F 1 "4.7k" H 2070 2555 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 1930 2600 50  0001 C CNN
+F 3 "~" H 2000 2600 50  0001 C CNN
+	1    2000 2600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1800 2450 1900 2450
-Connection ~ 1900 2450
+	1800 2350 1900 2350
+Connection ~ 1900 2350
 Wire Wire Line
-	1900 2450 2000 2450
+	1900 2350 2000 2350
 Wire Wire Line
-	1200 2250 1900 2250
+	1200 2150 1900 2150
 Wire Wire Line
-	1900 2250 1900 2450
-Wire Wire Line
-	1500 2750 1800 2750
-Wire Wire Line
-	1800 2750 2300 2750
-Connection ~ 1800 2750
-Wire Wire Line
-	1500 2850 2000 2850
-Wire Wire Line
-	2000 2850 2400 2850
-Connection ~ 2000 2850
+	1900 2150 1900 2350
 $Comp
 L power:GND #PWR07
 U 1 1 616EEA72
@@ -169,13 +159,9 @@ F 3 "" H 2650 2600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2300 2750 2300 2250
-Wire Wire Line
 	2300 2250 2450 2250
 Wire Wire Line
 	2450 2350 2400 2350
-Wire Wire Line
-	2400 2350 2400 2650
 $Comp
 L power:GND #PWR03
 U 1 1 61709FF3
@@ -204,25 +190,15 @@ Wire Wire Line
 	2100 2050 2450 2050
 Wire Wire Line
 	3800 4400 3800 4250
-Wire Wire Line
-	2300 2750 3200 2750
-Connection ~ 2300 2750
-Wire Wire Line
-	1500 3050 2550 3050
-Wire Wire Line
-	2400 2650 3200 2650
-Connection ~ 2400 2650
-Wire Wire Line
-	2400 2650 2400 2850
 $Comp
 L Device:R R3
 U 1 1 617CA66A
-P 2550 2700
-F 0 "R3" H 2620 2746 50  0000 L CNN
-F 1 "4.7k" H 2620 2655 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 2480 2700 50  0001 C CNN
-F 3 "~" H 2550 2700 50  0001 C CNN
-	1    2550 2700
+P 2200 2700
+F 0 "R3" H 2270 2746 50  0000 L CNN
+F 1 "4.7k" H 2270 2655 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder" V 2130 2700 50  0001 C CNN
+F 3 "~" H 2200 2700 50  0001 C CNN
+	1    2200 2700
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -250,19 +226,7 @@ F 3 "https://ams.com/documents/20143/36005/AS1115_DS000206_1-00.pdf" H 3800 3050
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2000 2450 2000 2550
-Wire Wire Line
-	2550 2850 2550 2950
-Wire Wire Line
-	3200 2950 2550 2950
-Connection ~ 2550 2950
-Wire Wire Line
-	2550 2950 2550 3050
-Wire Wire Line
-	2550 2550 2550 2450
-Wire Wire Line
-	2550 2450 2000 2450
-Connection ~ 2000 2450
+	2000 2350 2000 2450
 $Comp
 L Device:R_POT_Small RV1
 U 1 1 61746943
@@ -320,9 +284,6 @@ F 4 "COMP-09665" V 8016 1322 60  0000 R CNN "Field4"
 	1    8100 2050
 	0    -1   1    0   
 $EndComp
-Connection ~ 3050 2450
-Wire Wire Line
-	3050 2450 3050 2500
 Wire Wire Line
 	4400 2150 6350 2150
 Wire Wire Line
@@ -454,4 +415,36 @@ F 3 "~" H 3900 1450 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3800 1300 3800 1850
+Wire Wire Line
+	3200 2750 2400 2750
+Connection ~ 2000 2750
+Wire Wire Line
+	2000 2750 1500 2750
+Wire Wire Line
+	1500 2650 1800 2650
+Connection ~ 1800 2650
+Wire Wire Line
+	1800 2650 2300 2650
+Wire Wire Line
+	2300 2250 2300 2650
+Connection ~ 2300 2650
+Wire Wire Line
+	2300 2650 3200 2650
+Wire Wire Line
+	2400 2350 2400 2750
+Connection ~ 2400 2750
+Wire Wire Line
+	1500 2950 2200 2950
+Wire Wire Line
+	2400 2750 2000 2750
+Wire Wire Line
+	2200 2850 2200 2950
+Connection ~ 2200 2950
+Wire Wire Line
+	2200 2950 3200 2950
+Wire Wire Line
+	2200 2550 2200 2350
+Wire Wire Line
+	2200 2350 2000 2350
+Connection ~ 2000 2350
 $EndSCHEMATC
