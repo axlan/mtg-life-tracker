@@ -95,7 +95,7 @@ static const unsigned char* ICONS[] = {
 
 void DrawSelectedTotal(void) {
   display.clearDisplay();
-  
+
   display.setTextSize(2);             // Normal 1:1 pixel scale
   display.setTextColor(SSD1306_WHITE);        // Draw white text
   display.setCursor(6, 0);             // Start at top-left corner
@@ -108,14 +108,14 @@ void DrawSelectedTotal(void) {
       }
       display.print(i);
   }
-    
+
   display.drawBitmap(
     (display.width()  - ICON_WIDTH ) / 2,
     YELLOW_HEIGHT,
     ICONS[selected_total], ICON_WIDTH, ICON_HEIGHT, 1);
 
   display.display();
-} 
+}
 
 
 void setup_wifi() {
@@ -143,7 +143,7 @@ void setup_wifi() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
- 
+
 }
 
 void reconnect() {
@@ -177,7 +177,7 @@ void setup()
     as.read(); // reset any pending interrupt on the chip side
 
     as.display(0, 0);
-    
+
     Serial.begin(9600);
 
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
@@ -197,6 +197,12 @@ void setup()
 
 void loop()
 {
+    if (!client.connected()) {
+        reconnect();
+        value = 0;
+    }
+    client.loop();
+
     if (!interrupted)
     {
         delay(100);
@@ -209,7 +215,7 @@ void loop()
     uint16_t current = ~as.read();
     if (current == 0)
         return;
-    
+
     Serial.println(String("Got press: ") + current);
 
     // (In/De)crement
