@@ -11,18 +11,29 @@
 // bottom: SegA 6
 
 //Todo:
-// Add OLED
 // Add Reset
+// Add dice rolls
 // Be able to display two totals < 100
 
 #include <math.h>
 
 #include <Wire.h>
+#include <Arduino.h>
+#ifdef ESP32
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#elif defined(ESP8266)
+#include <ESP8266WiFi.h>
+#endif
+#include <ArduinoOTA.h>
+#include <Wire.h>
 
+#include <PubSubClient.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <AS1115.h>
 
+#include "secrets.h"
 #include "icons.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -40,6 +51,18 @@ int selected_digit = 0;
 AS1115 as = AS1115(0x00);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
+
+
+const char* mqtt_server = "192.168.1.110";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+unsigned long lastMsg = 0;
+#define MSG_BUFFER_WORDS	(100)
+#define MSG_BUFFER_SIZE	(MSG_BUFFER_WORDS * sizeof(uint16_t))
+char msg[MSG_BUFFER_SIZE];
+int value = 0;
+
 
 volatile bool interrupted = false;
 void IRAM_ATTR interrupt()
@@ -94,6 +117,55 @@ void DrawSelectedTotal(void) {
   display.display();
 } 
 
+
+void setup_wifi() {
+
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  randomSeed(micros());
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+ 
+}
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...1");
+    // Create a random client ID
+    String clientId = "ESP8266Client-";
+    clientId += String(random(0xffff), HEX);
+    // Attempt to connect
+    if (client.connect(clientId.c_str())) {
+      Serial.println("connected");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+
 void setup()
 {
     pinMode(AS1115_ISR_PIN, INPUT);
@@ -115,6 +187,12 @@ void setup()
     }
 
     DrawSelectedTotal();
+
+    setup_wifi();
+    client.setServer(mqtt_server, 1883);
+    client.setCallback(callback);
+    //client.setSocketTimeout(0xFFFF);
+    client.setKeepAlive(0xFFFF);
 }
 
 void loop()
