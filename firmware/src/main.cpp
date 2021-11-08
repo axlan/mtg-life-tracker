@@ -14,6 +14,7 @@
 // Add Reset
 // Add dice rolls
 // Be able to display two totals < 100
+// Make wifi more efficient
 
 #include <math.h>
 
@@ -43,6 +44,11 @@
 
 #define AS1115_ISR_PIN 2 ///< Interrupt pin connected to AS1115
 
+// Set uniquely for each device
+#define CLIENT_ID "unit0"
+#define TOPIC_PACKED "life_counters/" CLIENT_ID "/totals_packed"
+#define TOPIC_JSON "life_counters/" CLIENT_ID "/totals_json"
+
 constexpr size_t NUM_TOTALS = 10;
 uint16_t totals[NUM_TOTALS] = {0};
 int selected_total = 0;
@@ -57,11 +63,6 @@ const char* mqtt_server = "192.168.1.110";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-unsigned long lastMsg = 0;
-#define MSG_BUFFER_WORDS	(100)
-#define MSG_BUFFER_SIZE	(MSG_BUFFER_WORDS * sizeof(uint16_t))
-char msg[MSG_BUFFER_SIZE];
-int value = 0;
 
 
 volatile bool interrupted = false;
@@ -92,6 +93,26 @@ static const unsigned char* ICONS[] = {
     knight_bmp,
     goblin_bmp
 };
+
+void publishJSON() {
+    String msg = "[";
+    for (size_t i = 0; i < NUM_TOTALS; i++) {
+        msg += String(totals[i]);
+        if (i != NUM_TOTALS - 1) {
+            msg += ",";
+        }
+    }
+    msg += "]";
+    if (!client.publish(TOPIC_JSON, msg.c_str(), true)) {
+       Serial.println("Json pub failed.");
+    }
+}
+
+void publishPacked() {
+    if (!client.publish(TOPIC_PACKED, reinterpret_cast<uint8_t*>(totals), sizeof(totals) ,true)) {
+        Serial.println("Packed pub failed.");
+    }
+}
 
 void DrawSelectedTotal(void) {
   display.clearDisplay();
@@ -124,17 +145,15 @@ void setup_wifi() {
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println(SECRET_SSID);
 
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.begin(SECRET_SSID, SECRET_PASSWORD);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-
-  randomSeed(micros());
 
   Serial.println("");
   Serial.println("WiFi connected");
@@ -149,12 +168,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...1");
-    // Create a random client ID
-    String clientId = "ESP8266Client-";
-    clientId += String(random(0xffff), HEX);
+    Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect(clientId.c_str())) {
+    if (client.connect(CLIENT_ID)) {
       Serial.println("connected");
     } else {
       Serial.print("failed, rc=");
@@ -193,15 +209,18 @@ void setup()
     client.setCallback(callback);
     //client.setSocketTimeout(0xFFFF);
     client.setKeepAlive(0xFFFF);
+
+    ArduinoOTA.begin();
 }
 
 void loop()
 {
     if (!client.connected()) {
         reconnect();
-        value = 0;
     }
     client.loop();
+
+    ArduinoOTA.handle();
 
     if (!interrupted)
     {
@@ -264,4 +283,6 @@ void loop()
     as.display(totals[selected_total], selected_digit);
 
     DrawSelectedTotal();
+    publishJSON();
+    // publishPacked();
 }
