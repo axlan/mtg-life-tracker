@@ -5,4 +5,8 @@ D 4 Digit 7 Segment Display This is a part for the 4-Digit 7-segment LEDs from Y
 K PROD_ID:COMP-09665
 $ENDCMP
 #
+$CMP TACTILE-NAV-STICK-DIP
+F https://cdn-shop.adafruit.com/datasheets/SKQUCAA010-ALPS.pdf
+$ENDCMP
+#
 #End Doc Library

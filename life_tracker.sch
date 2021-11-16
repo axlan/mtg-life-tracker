@@ -14,17 +14,6 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MySymbols:TACTILE-NAV-SWITCH J1
-U 1 1 6167DB3B
-P 5700 3600
-F 0 "J1" H 5700 4065 50  0000 C CNN
-F 1 "TACTILE-NAV-SWITCH" H 5700 3974 50  0000 C CNN
-F 2 "MyFootprints:JS1300AQ" H 6050 4000 50  0001 C CNN
-F 3 "https://sten-eswitch-13110800-production.s3.amazonaws.com/system/asset/product_line/data_sheet/21/JS1300.pdf" H 6050 4000 50  0001 C CNN
-	1    5700 3600
-	0    1    1    0   
-$EndComp
-$Comp
 L MCU_Module:WeMos_D1_mini U1
 U 1 1 616A6F86
 P 1100 2950
@@ -73,12 +62,12 @@ $EndComp
 $Comp
 L power:GND #PWR02
 U 1 1 616E3FDE
-P 1100 4000
-F 0 "#PWR02" H 1100 3750 50  0001 C CNN
-F 1 "GND" H 1105 3827 50  0000 C CNN
-F 2 "" H 1100 4000 50  0001 C CNN
-F 3 "" H 1100 4000 50  0001 C CNN
-	1    1100 4000
+P 1100 3900
+F 0 "#PWR02" H 1100 3650 50  0001 C CNN
+F 1 "GND" H 1105 3727 50  0000 C CNN
+F 2 "" H 1100 3900 50  0001 C CNN
+F 3 "" H 1100 3900 50  0001 C CNN
+	1    1100 3900
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -129,65 +118,24 @@ $Comp
 L MySymbols:PTS526-tactile-button U4
 U 1 1 616EFDB3
 P 6300 3600
-F 0 "U4" H 6300 3915 50  0000 C CNN
-F 1 "PTS526-tactile-button" H 6300 3824 50  0000 C CNN
-F 2 "MyFootprints:pts526-tactile-button" H 6300 3350 50  0001 C CNN
-F 3 "" H 6300 3350 50  0001 C CNN
+F 0 "U4" H 6100 3750 50  0000 C CNN
+F 1 "PTS526-tactile-button" H 5950 3500 50  0000 C CNN
+F 2 "MyFootprints:TACTILE-DIP-BUTTON" H 6300 3350 50  0001 C CNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/B3F-1000-Omron.pdf" H 6300 3350 50  0001 C CNN
 	1    6300 3600
 	0    1    1    0   
 $EndComp
 $Comp
 L MySymbols:PTS526-tactile-button U5
 U 1 1 616F082F
-P 6700 3600
-F 0 "U5" H 6700 3915 50  0000 C CNN
-F 1 "PTS526-tactile-button" H 6700 3824 50  0000 C CNN
-F 2 "MyFootprints:pts526-tactile-button" H 6700 3350 50  0001 C CNN
-F 3 "" H 6700 3350 50  0001 C CNN
-	1    6700 3600
-	0    1    1    0   
+P 6800 3600
+F 0 "U5" H 6550 3500 50  0000 C CNN
+F 1 "PTS526-tactile-button" H 6950 3800 50  0000 C CNN
+F 2 "MyFootprints:TACTILE-DIP-BUTTON" H 6800 3350 50  0001 C CNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/B3F-1000-Omron.pdf" H 6800 3350 50  0001 C CNN
+	1    6800 3600
+	0    -1   -1   0   
 $EndComp
-$Comp
-L MySymbols:I2C_128x64_OLED U2
-U 1 1 61706D78
-P 2650 2250
-F 0 "U2" H 2650 2050 50  0000 L CNN
-F 1 "I2C_128x64_OLED" H 2250 2650 50  0000 L CNN
-F 2 "MyFootprints:I2C_128x64_OLED" H 2650 2600 50  0001 C CNN
-F 3 "" H 2650 2600 50  0001 C CNN
-	1    2650 2250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2300 2250 2450 2250
-Wire Wire Line
-	2450 2350 2400 2350
-$Comp
-L power:GND #PWR03
-U 1 1 61709FF3
-P 2100 2050
-F 0 "#PWR03" H 2100 1800 50  0001 C CNN
-F 1 "GND" H 2105 1877 50  0000 C CNN
-F 2 "" H 2100 2050 50  0001 C CNN
-F 3 "" H 2100 2050 50  0001 C CNN
-	1    2100 2050
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+5V #PWR04
-U 1 1 6170B2B6
-P 2250 2150
-F 0 "#PWR04" H 2250 2000 50  0001 C CNN
-F 1 "+5V" H 2265 2323 50  0000 C CNN
-F 2 "" H 2250 2150 50  0001 C CNN
-F 3 "" H 2250 2150 50  0001 C CNN
-	1    2250 2150
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2450 2150 2250 2150
-Wire Wire Line
-	2100 2050 2450 2050
 Wire Wire Line
 	3800 4400 3800 4250
 $Comp
@@ -287,16 +235,6 @@ $EndComp
 Wire Wire Line
 	4400 2150 6350 2150
 Wire Wire Line
-	7000 2250 5850 2250
-Wire Wire Line
-	4400 2350 5700 2350
-Wire Wire Line
-	7000 2450 5550 2450
-Wire Wire Line
-	4400 2550 5400 2550
-Wire Wire Line
-	7000 2650 5250 2650
-Wire Wire Line
 	4400 2850 4600 2850
 Wire Wire Line
 	4600 2850 4600 2750
@@ -339,59 +277,7 @@ Connection ~ 6350 2150
 Wire Wire Line
 	6350 2150 7000 2150
 Wire Wire Line
-	5850 3350 5850 2250
-Connection ~ 5850 2250
-Wire Wire Line
-	5850 2250 4400 2250
-Wire Wire Line
-	5700 3350 5700 2350
-Connection ~ 5700 2350
-Wire Wire Line
-	5700 2350 7000 2350
-Wire Wire Line
-	5550 3350 5550 2450
-Connection ~ 5550 2450
-Wire Wire Line
-	5550 2450 4400 2450
-Wire Wire Line
-	5400 3350 5400 2550
-Connection ~ 5400 2550
-Wire Wire Line
-	5400 2550 7000 2550
-Wire Wire Line
-	5250 3350 5250 2650
-Connection ~ 5250 2650
-Wire Wire Line
-	5250 2650 4400 2650
-Wire Wire Line
-	4400 3950 5250 3950
-Wire Wire Line
-	5250 3950 5250 3850
-Wire Wire Line
-	5250 3950 5400 3950
-Wire Wire Line
-	5400 3950 5400 3850
-Connection ~ 5250 3950
-Wire Wire Line
-	5400 3950 5550 3950
-Wire Wire Line
-	5550 3950 5550 3850
-Connection ~ 5400 3950
-Wire Wire Line
-	5550 3950 5700 3950
-Wire Wire Line
-	5700 3950 5700 3850
-Connection ~ 5550 3950
-Wire Wire Line
-	5700 3950 5850 3950
-Wire Wire Line
-	5850 3950 5850 3850
-Connection ~ 5700 3950
-Wire Wire Line
-	5850 3950 6350 3950
-Wire Wire Line
 	6350 3950 6350 3750
-Connection ~ 5850 3950
 Wire Wire Line
 	6350 3950 6750 3950
 Wire Wire Line
@@ -415,8 +301,6 @@ F 3 "~" H 3900 1450 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3800 1300 3800 1850
-Wire Wire Line
-	3200 2750 2400 2750
 Connection ~ 2000 2750
 Wire Wire Line
 	2000 2750 1500 2750
@@ -424,19 +308,7 @@ Wire Wire Line
 	1500 2650 1800 2650
 Connection ~ 1800 2650
 Wire Wire Line
-	1800 2650 2300 2650
-Wire Wire Line
-	2300 2250 2300 2650
-Connection ~ 2300 2650
-Wire Wire Line
-	2300 2650 3200 2650
-Wire Wire Line
-	2400 2350 2400 2750
-Connection ~ 2400 2750
-Wire Wire Line
 	1500 2950 2200 2950
-Wire Wire Line
-	2400 2750 2000 2750
 Wire Wire Line
 	2200 2850 2200 2950
 Connection ~ 2200 2950
@@ -447,4 +319,59 @@ Wire Wire Line
 Wire Wire Line
 	2200 2350 2000 2350
 Connection ~ 2000 2350
+$Comp
+L MySymbols:TACTILE-NAV-STICK-DIP U6
+U 1 1 619452D2
+P 5600 3500
+F 0 "U6" V 5654 3828 50  0000 L CNN
+F 1 "TACTILE-NAV-STICK-DIP" V 6150 3000 50  0000 L CNN
+F 2 "MyFootprints:TACTILE-NAV-STICK-DIP" H 6000 3200 50  0001 C CNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/SKQUCAA010-ALPS.pdf" H 6000 3200 50  0001 C CNN
+	1    5600 3500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4400 2250 5700 2250
+Wire Wire Line
+	4400 2450 5500 2450
+Wire Wire Line
+	4400 2650 5400 2650
+Wire Wire Line
+	4400 2350 5800 2350
+Wire Wire Line
+	4400 2550 5600 2550
+Wire Wire Line
+	4400 3950 5600 3950
+Connection ~ 5600 3950
+Wire Wire Line
+	5600 3950 6350 3950
+Wire Wire Line
+	5800 3250 5800 2350
+Connection ~ 5800 2350
+Wire Wire Line
+	5800 2350 7000 2350
+Wire Wire Line
+	5700 3250 5700 2250
+Connection ~ 5700 2250
+Wire Wire Line
+	5700 2250 7000 2250
+Wire Wire Line
+	5500 3250 5500 2450
+Connection ~ 5500 2450
+Wire Wire Line
+	5500 2450 7000 2450
+Wire Wire Line
+	5400 3250 5400 2650
+Connection ~ 5400 2650
+Wire Wire Line
+	5400 2650 7000 2650
+Wire Wire Line
+	5600 3250 5600 2550
+Connection ~ 5600 2550
+Wire Wire Line
+	5600 2550 7000 2550
+Wire Wire Line
+	1800 2650 3200 2650
+Wire Wire Line
+	2000 2750 3200 2750
 $EndSCHEMATC
