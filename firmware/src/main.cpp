@@ -32,6 +32,7 @@
 #include <Adafruit_SSD1306.h>
 #include <AS1115.h>
 
+#include "dice_roller.h"
 #include "life_counter.h"
 #include "secrets.h"
 
@@ -57,12 +58,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 LifeCounter life_counter(as, display, client, TOPIC_JSON);
-
-enum class Mode {
-    LIFE_COUNT,
-    DICE_ROLL
-};
-Mode mode = Mode::LIFE_COUNT;
+DiceRoller dice_roller(as, display);
 
 App* active_app = &life_counter;
 
@@ -143,7 +139,7 @@ void setup()
 
     ArduinoOTA.begin();
 
-    life_counter.Display();
+    active_app->Display();
 }
 
 void loop()
@@ -198,6 +194,16 @@ void loop()
     else if (bitRead(current, 4))
     {
         active_app->Left();
+    }
+    // Middle
+    else if (bitRead(current, 2))
+    {
+        if (active_app == &life_counter) {
+            active_app = &dice_roller;
+        }
+        else {
+            active_app = &life_counter;
+        }
     }
 
     active_app->Display();
