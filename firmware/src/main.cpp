@@ -15,8 +15,7 @@
 // Add dice rolls
 // Be able to display two totals < 100
 // Make wifi more efficient
-
-#include <math.h>
+// Test other oled style
 
 #include <Wire.h>
 #include <Arduino.h>
@@ -30,12 +29,12 @@
 #include <Wire.h>
 
 #include <PubSubClient.h>
-#include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <AS1115.h>
 
+#include "dice_roller.h"
+#include "life_counter.h"
 #include "secrets.h"
-#include "icons.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -49,95 +48,25 @@
 #define TOPIC_PACKED "life_counters/" CLIENT_ID "/totals_packed"
 #define TOPIC_JSON "life_counters/" CLIENT_ID "/totals_json"
 
-constexpr size_t NUM_TOTALS = 10;
-uint16_t totals[NUM_TOTALS] = {0};
-int selected_total = 0;
-int selected_digit = 0;
-
 AS1115 as = AS1115(0x00);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
-
 
 const char* mqtt_server = "192.168.1.110";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+LifeCounter life_counter(as, display, client, TOPIC_JSON);
+DiceRoller dice_roller(as, display);
+
+App* active_app = &life_counter;
 
 volatile bool interrupted = false;
 void IRAM_ATTR interrupt()
 {
     interrupted = true;
 }
-
-void IncrementCursor(int16_t x, int16_t y)
-{
-    display.setCursor(x + display.getCursorX(), y + display.getCursorY());
-}
-
-
-constexpr uint16_t ICON_WIDTH = 48;
-constexpr uint16_t ICON_HEIGHT = 48;
-
-
-static const unsigned char* ICONS[] = {
-    heart_bmp,
-    poison_bmp,
-    squirrel_bmp,
-    cat_bmp,
-    dog_bmp,
-    energy_bmp,
-    spirit_bmp,
-    robot_bmp,
-    knight_bmp,
-    goblin_bmp
-};
-
-void publishJSON() {
-    String msg = "[";
-    for (size_t i = 0; i < NUM_TOTALS; i++) {
-        msg += String(totals[i]);
-        if (i != NUM_TOTALS - 1) {
-            msg += ",";
-        }
-    }
-    msg += "]";
-    if (!client.publish(TOPIC_JSON, msg.c_str(), true)) {
-       Serial.println("Json pub failed.");
-    }
-}
-
-void publishPacked() {
-    if (!client.publish(TOPIC_PACKED, reinterpret_cast<uint8_t*>(totals), sizeof(totals) ,true)) {
-        Serial.println("Packed pub failed.");
-    }
-}
-
-void DrawSelectedTotal(void) {
-  display.clearDisplay();
-
-  display.setTextSize(2);             // Normal 1:1 pixel scale
-  display.setTextColor(SSD1306_WHITE);        // Draw white text
-  display.setCursor(6, 0);             // Start at top-left corner
-
-  for (size_t i = 0; i < NUM_TOTALS; i++) {
-      if (i == (size_t)selected_total) {
-          display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
-      } else {
-          display.setTextColor(SSD1306_WHITE);
-      }
-      display.print(i);
-  }
-
-  display.drawBitmap(
-    (display.width()  - ICON_WIDTH ) / 2,
-    YELLOW_HEIGHT,
-    ICONS[selected_total], ICON_WIDTH, ICON_HEIGHT, 1);
-
-  display.display();
-}
-
 
 void setup_wifi() {
 
@@ -202,8 +131,6 @@ void setup()
         for(;;); // Don't proceed, loop forever
     }
 
-    DrawSelectedTotal();
-
     setup_wifi();
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
@@ -211,6 +138,8 @@ void setup()
     client.setKeepAlive(0xFFFF);
 
     ArduinoOTA.begin();
+
+    active_app->Display();
 }
 
 void loop()
@@ -238,51 +167,44 @@ void loop()
     Serial.println(String("Got press: ") + current);
 
     // (In/De)crement
-    if (current & 0b1100000)
+    if (bitRead(current, 5))
     {
-        int total;
-        int change = pow(10, selected_digit);
-        if (bitRead(current, 6))
-        {
-            change *= -1;
-        }
-        total = totals[selected_total] + change;
-        total = min(total, 9999);
-        total = max(total, 0);
-        totals[selected_total] = total;
+        active_app->Increment();
+    }
+    else if (bitRead(current, 6))
+    {
+        active_app->Decrement();
     }
     // Up
     else if (bitRead(current, 3))
     {
-        selected_digit = min(selected_digit + 1, 3);
+        active_app->Up();
     }
     // Down
     else if (bitRead(current, 1))
     {
-        selected_digit = max(selected_digit - 1, 0);
+        active_app->Down();
     }
     // Right
     else if (bitRead(current, 0))
     {
-        selected_total++;
-        selected_total %= NUM_TOTALS;
+        active_app->Right();
     }
     // Left
     else if (bitRead(current, 4))
     {
-        if (selected_total == 0)
-        {
-            selected_total = NUM_TOTALS - 1;
+        active_app->Left();
+    }
+    // Middle
+    else if (bitRead(current, 2))
+    {
+        if (active_app == &life_counter) {
+            active_app = &dice_roller;
         }
-        else
-        {
-            selected_total--;
+        else {
+            active_app = &life_counter;
         }
     }
 
-    as.display(totals[selected_total], selected_digit);
-
-    DrawSelectedTotal();
-    publishJSON();
-    // publishPacked();
+    active_app->Display();
 }
