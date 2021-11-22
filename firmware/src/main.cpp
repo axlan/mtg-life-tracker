@@ -170,39 +170,35 @@ void loop()
 
     Serial.println(String("Got press: ") + current);
 
-    // // (In/De)crement
-    // if (bitRead(current, 5))
-    // {
-    //     active_app->Increment();
-    // }
-    // else if (bitRead(current, 6))
-    // {
-    //     active_app->Decrement();
-    // }
-    // else if (bitRead(current, 3))
-    // {
-    //     active_app->Up();
-    // }
-    // // Up
-    // else if (bitRead(current, 3))
-    // {
-    //     active_app->Up();
-    // }
-    // // Down
-    // else if (bitRead(current, 1))
-    // {
-    //     active_app->Down();
-    // }
-    // // Right
-    // else if (bitRead(current, 0))
-    // {
-    //     active_app->Right();
-    // }
-    // // Left
-    // else if (bitRead(current, 4))
-    // {
-    //     active_app->Up();
-    // }
+    // (In/De)crement
+    if (bitRead(current, 5))
+    {
+        active_app->Increment();
+    }
+    else if (bitRead(current, 6))
+    {
+        active_app->Decrement();
+    }
+    // Up
+    else if (bitRead(current, 3))
+    {
+        active_app->Up();
+    }
+    // Down
+    else if (bitRead(current, 1))
+    {
+        active_app->Down();
+    }
+    // Right
+    else if (bitRead(current, 0))
+    {
+        active_app->Right();
+    }
+    // Left
+    else if (bitRead(current, 4))
+    {
+        active_app->Left();
+    }
 
-    // active_app->Display();
+    active_app->Display();
 }
