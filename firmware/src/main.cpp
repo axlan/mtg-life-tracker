@@ -166,8 +166,18 @@ void loop()
 
     Serial.println(String("Got press: ") + current);
 
+    // Middle
+    if (bitRead(current, 2))
+    {
+        if (active_app == &life_counter) {
+            active_app = &dice_roller;
+        }
+        else {
+            active_app = &life_counter;
+        }
+    }
     // (In/De)crement
-    if (bitRead(current, 5))
+    else if (bitRead(current, 5))
     {
         active_app->Increment();
     }
@@ -195,16 +205,7 @@ void loop()
     {
         active_app->Left();
     }
-    // Middle
-    else if (bitRead(current, 2))
-    {
-        if (active_app == &life_counter) {
-            active_app = &dice_roller;
-        }
-        else {
-            active_app = &life_counter;
-        }
-    }
+    
 
     active_app->Display();
 }
