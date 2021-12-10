@@ -34,6 +34,7 @@
 
 #include "dice_roller.h"
 #include "life_counter.h"
+#include "menu.h"
 #include "secrets.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -61,6 +62,12 @@ LifeCounter life_counter(as, display, client, TOPIC_JSON);
 DiceRoller dice_roller(as, display);
 
 App* active_app = &life_counter;
+
+
+App* apps[] = {&life_counter, &dice_roller};
+
+Menu menu(display, apps, sizeof(apps) / sizeof(App*) , &active_app);
+
 
 volatile bool interrupted = false;
 void IRAM_ATTR interrupt()
@@ -169,12 +176,7 @@ void loop()
     // Middle
     if (bitRead(current, 2))
     {
-        if (active_app == &life_counter) {
-            active_app = &dice_roller;
-        }
-        else {
-            active_app = &life_counter;
-        }
+        active_app = &menu;
     }
     // (In/De)crement
     else if (bitRead(current, 5))

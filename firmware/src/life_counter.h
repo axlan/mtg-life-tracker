@@ -17,6 +17,11 @@ class LifeCounter : public App {
   void Decrement() override;
   void Display() override;
 
+  const char* GetName() const override {
+    return "Life Counter";
+  }
+
+
  private:
   AS1115& seven_seg_;
   Adafruit_SSD1306& display_;

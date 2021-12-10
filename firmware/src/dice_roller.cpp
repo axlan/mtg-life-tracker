@@ -85,8 +85,6 @@ void DiceRoller::roll() {
 
 void DiceRoller::Increment() { roll(); }
 
-void DiceRoller::Decrement() { roll(); }
-
 void DiceRoller::Display() {
   seven_seg_.display(roll_value);
 

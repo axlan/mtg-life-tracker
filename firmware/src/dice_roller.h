@@ -1,4 +1,3 @@
-#include <PubSubClient.h>
 #include <Adafruit_SSD1306.h>
 #include <AS1115.h>
 
@@ -13,8 +12,12 @@ class DiceRoller : public App {
   void Left() override;
   void Right() override;
   void Increment() override;
-  void Decrement() override;
+  void Decrement() override {Increment();}
   void Display() override;
+
+  const char* GetName() const override {
+    return "Dice Roller";
+  }
 
  private:
   AS1115& seven_seg_;
