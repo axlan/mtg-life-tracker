@@ -14,7 +14,7 @@
 #define START_POINT Point{5, 5}
 
 
-#define UPDATE_PERIOD_MS 200
+#define UPDATE_PERIOD_MS 100
 
 enum class Direction {
   UP,
@@ -54,19 +54,27 @@ void DrawPoint(const Point& point, Adafruit_SSD1306& display) {
 }
 
 void Snake::Up() {
-  direction = Direction::UP;
+  if (direction != Direction::DOWN) {
+    direction = Direction::UP;
+  }
 }
 
 void Snake::Down() { 
-  direction = Direction::DOWN;
+  if (direction != Direction::UP) {
+    direction = Direction::DOWN;
+  }
 }
 
 void Snake::Left() {
-  direction = Direction::LEFT;
+  if (direction != Direction::RIGHT) {
+    direction = Direction::LEFT;
+  }
 }
 
 void Snake::Right() {
-  direction = Direction::RIGHT;
+  if (direction != Direction::LEFT) {
+    direction = Direction::RIGHT;
+  }
 }
 
 void Snake::Increment() {
@@ -109,7 +117,18 @@ void Snake::Update() {
       break;
     }
 
-    if (head.x > MAX_X || head.y > MAX_Y) {
+    bool collided = head.x >= MAX_X || head.y >= MAX_Y;
+
+    if (!collided) {
+      for (const auto& seg : body) {
+        if (head == seg) {
+          collided = true;
+          break;
+        }
+      }
+    }
+
+    if (collided) {
       dead = true;
       Display();
       return;
