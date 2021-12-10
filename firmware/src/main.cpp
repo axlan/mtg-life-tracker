@@ -36,6 +36,7 @@
 #include "life_counter.h"
 #include "menu.h"
 #include "secrets.h"
+#include "snake.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -60,11 +61,12 @@ PubSubClient client(espClient);
 
 LifeCounter life_counter(as, display, client, TOPIC_JSON);
 DiceRoller dice_roller(as, display);
+Snake snake(as, display);
 
 App* active_app = &life_counter;
 
 
-App* apps[] = {&life_counter, &dice_roller};
+App* apps[] = {&life_counter, &dice_roller, &snake};
 
 Menu menu(display, apps, sizeof(apps) / sizeof(App*) , &active_app);
 
@@ -157,6 +159,8 @@ void loop()
     client.loop();
 
     ArduinoOTA.handle();
+
+    active_app->Update();
 
     if (!interrupted)
     {

@@ -10,4 +10,5 @@ public:
   virtual void Decrement() = 0;
   virtual void Display() = 0;
   virtual const char* GetName() const = 0;
+  virtual void Update() {};
 };
