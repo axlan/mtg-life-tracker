@@ -44,9 +44,9 @@ void LifeCounter::Display() {
 
   display_.clearDisplay();
 
-  display_.setTextSize(2);               // Normal 1:1 pixel scale
+  display_.setTextSize(2);               // 2:1 pixel scale
   display_.setTextColor(SSD1306_WHITE);  // Draw white text
-  display_.setCursor(6, 0);              // Start at top-left corner
+  display_.setCursor(6, 0);              // Start at top-left corner offset to center numbers
 
   for (size_t i = 0; i < NUM_TOTALS; i++) {
     if (i == (size_t)selected_total) {
@@ -61,12 +61,27 @@ void LifeCounter::Display() {
   display_.drawBitmap((display_.width() - ICON_WIDTH) / 2, YELLOW_HEIGHT,
                       ICONS[selected_total], ICON_WIDTH, ICON_HEIGHT, 1);
 
+  display_.setTextSize(1);                  // Normal 1:1 pixel scale
+  display_.setTextColor(SSD1306_WHITE);
+  display_.setCursor(0, SCREEN_HEIGHT - 7); // Start at bottom-left corner (font is 6x8)
+
+  if (!WiFi.isConnected()) {
+    display_.print("No IP");
+  } else if (topic_.isEmpty() || !mqtt_client_.connected()) {
+    display_.print("No MQTT");
+  } else {
+    display_.print("Online");
+  }
+
   display_.display();
 
   SendMQTT();
 }
 
 void LifeCounter::SendMQTT() {
+  if (topic_.isEmpty() || !mqtt_client_.connected()) {
+    return;
+  }
   String msg = "[";
   for (size_t i = 0; i < NUM_TOTALS; i++) {
     msg += String(totals[i]);
@@ -75,7 +90,7 @@ void LifeCounter::SendMQTT() {
     }
   }
   msg += "]";
-  if (!mqtt_client_.publish(topic_, msg.c_str(), true)) {
+  if (!mqtt_client_.publish(topic_.c_str(), msg.c_str(), true)) {
     Serial.println("Json pub failed.");
   }
 }
@@ -90,4 +105,8 @@ void LifeCounter::UpdateValue(bool increment) {
   total = min(total, 9999);
   total = max(total, 0);
   totals[selected_total] = total;
+}
+
+void LifeCounter::SetDeviceName(const char* device_name) {
+  topic_ = String() + "life_counters/" + device_name + "/totals_json";
 }
