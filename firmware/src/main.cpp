@@ -37,6 +37,7 @@
 #include "life_counter.h"
 #include "menu.h"
 #include "snake.h"
+#include "settings.h"
 
 #define SCREEN_WIDTH 128    // OLED display width, in pixels
 #define SCREEN_HEIGHT 64    // OLED display height, in pixels
@@ -56,7 +57,7 @@ constexpr std::array<ParamEntry, 2> PARAMS = {{
     },
     {
       "mqttserverid",
-      "MQTTServer",
+      "MQTT Server",
       CUSTOM_FIELD_LEN
     }
 }};
@@ -75,10 +76,11 @@ long long next_reconnect = 0;
 LifeCounter life_counter(as, display, client);
 DiceRoller dice_roller(as, display);
 Snake snake(as, display);
+Settings settings(display, wm_helper);
 
 App *active_app = &life_counter;
 
-App *apps[] = {&life_counter, &dice_roller, &snake};
+App *apps[] = {&life_counter, &dice_roller, &snake, &settings};
 
 Menu menu(display, apps, sizeof(apps) / sizeof(App *), &active_app);
 
@@ -90,7 +92,7 @@ void setup_wifi() {
   WiFi.mode(WIFI_STA);
 
   wm_helper.Init(0xBEEF, PARAMS.data(), PARAMS.size());
-  life_counter.SetDeviceName(wm_helper.GetSetting(SETTING_DEVICE_NAME));
+  life_counter.SetDeviceName(wm_helper.GetSettingValue(SETTING_DEVICE_NAME));
 
   // automatically connect using saved credentials if they exist
   // If connection fails it starts an access point with the specified name
@@ -106,8 +108,8 @@ void setup_wifi() {
 void callback(char *topic, byte *payload, unsigned int length) {}
 
 bool reconnect() {
-  const char* device_name = wm_helper.GetSetting(SETTING_DEVICE_NAME);
-  const char* mqtt_server = wm_helper.GetSetting(SETTING_MQTT_SERVER);
+  const char* device_name = wm_helper.GetSettingValue(SETTING_DEVICE_NAME);
+  const char* mqtt_server = wm_helper.GetSettingValue(SETTING_MQTT_SERVER);
   if (next_reconnect > millis() || !WiFi.isConnected() ||
       strlen(device_name) == 0 ||
       strlen(mqtt_server) == 0) {
