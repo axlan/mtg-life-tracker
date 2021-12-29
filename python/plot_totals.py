@@ -40,17 +40,32 @@ fig = go.Figure()
 
 clients = df['client'].unique()
 
-idx = 0
-for client in clients:
+last_time = df['time'].max()
+
+STYLES = [
+    {},
+    {'dash': 'dash'},
+    {'dash': 'dot'},
+    {'mode': 'lines+markers'},
+]
+
+
+for client_idx, client in enumerate(clients):
     client_df = df[df['client'] == client]
-    for total in total_cols:
+    if client_df['time'].max() < last_time:
+        row = client_df.iloc[-1].copy()
+        row['time'] = last_time
+        client_df = client_df.append(row)
+    client_style = STYLES[client_idx]
+    for color_idx, total in enumerate(total_cols):
         if df[total].max() == 0:
             continue
+        line_style = dict(client_style)
+        line_style['color'] = DEFAULT_PLOTLY_COLORS[color_idx]
         fig.add_trace(go.Scatter(x=client_df['time'], y=client_df[total], mode='lines',
             name=client + ' ' + total,
-            line=dict(color=DEFAULT_PLOTLY_COLORS[idx])
+            line=line_style
         ))
-        idx += 1
 
 
 # fig.update_layout(

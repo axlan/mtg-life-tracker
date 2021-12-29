@@ -11,11 +11,10 @@
 // bottom: SegA 6
 
 // Todo:
-// Add Reset
-// Add dice rolls
-// Be able to display two totals < 100
 // Make wifi more efficient
-// Test other oled style
+// Add alternate modes for other/no display
+// Update app on internet status and settings changes
+// Fix command line OTA updating
 
 #include <Arduino.h>
 #include <Wire.h>
